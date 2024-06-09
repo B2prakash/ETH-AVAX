@@ -1,0 +1,44 @@
+// write a smart contract that implements the require(), assert() and revert() statements.
+
+// SPDX-License-Identifier: MIT 
+pragma solidity ^0.8.18;
+
+contract SmartContract {
+    address public owner;
+    uint256 public value;
+
+    constructor() {
+        owner = msg.sender;
+        value = 0;
+    }
+
+    function setValue(uint256 _newValue) public {
+        require(msg.sender == owner, "Only the owner can set the value");
+        require(_newValue > 0, "New value must be greater than zero");
+        value = _newValue;
+    }
+
+    function withdraw() public {
+        require(value > 0, "Value must be greater than zero");
+        uint256 amount = value;
+        value = 0;
+        payable(msg.sender).transfer(amount);
+    }
+
+    function assertExample(uint256 x) public pure returns (uint256) {
+        assert(x != 0); // Ensure input is not zero
+        return 100 / x;
+    }
+
+    function revertExample(uint256 x) public pure returns (uint256) {
+        if (x == 0) {
+            revert("Input cannot be zero");
+        }
+        return 100 / x;
+    }
+
+    function requireExample(uint256 x) public pure returns (uint256) {
+        require(x != 0, "Input cannot be zero");
+        return 100 / x;
+    }
+}
